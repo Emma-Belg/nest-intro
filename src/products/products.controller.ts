@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Get } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 @Controller('products')
@@ -25,5 +25,11 @@ export class ProductsController {
             prodPrice
             );
         return {id: generatedId};
+    }
+
+    //in the param you could handle for the path but we don't want to here
+    @Get()
+    getAllProducts() {
+        return this.productsService.getProducts();
     }
 }
