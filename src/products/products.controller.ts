@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from "@nestjs/common";
+import { Controller, Post, Body, Get , Param} from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 @Controller('products')
@@ -28,8 +28,14 @@ export class ProductsController {
     }
 
     //in the param you could handle for the path but we don't want to here
+    //if you have two products in the same file with the same decorator, it will never look past the first
     @Get()
     getAllProducts() {
         return this.productsService.getProducts();
+    }
+
+    @Get(':id')
+    getProduct(@Param('id') prodId: string){
+        return this.productsService.getSingleProduct(prodId);
     }
 }
