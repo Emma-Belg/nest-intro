@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get , Param} from "@nestjs/common";
+import { Controller, Post, Body, Get , Param, Patch, Delete} from "@nestjs/common";
 import { ProductsService } from "./products.service";
 
 @Controller('products')
@@ -34,8 +34,30 @@ export class ProductsController {
         return this.productsService.getProducts();
     }
 
+    //as GET methods cannot update the body you cannot use @Body with a Get method
     @Get(':id')
     getProduct(@Param('id') prodId: string){
         return this.productsService.getSingleProduct(prodId);
+    }
+
+    //b/c this will be merging with exisiting product with use PATCH
+    //we chose to use the url rather than the @Body (you can use either or both)
+    @Patch(':id')
+    updateProduct(
+        @Param('id') prodId: string, 
+        @Body('title') prodTitle: string, 
+        @Body('descrip') prodDescrip: string, 
+        @Body('price') prodPrice: number
+        ) : void {
+            this.productsService.updateProduct(prodId, prodTitle, prodDescrip, prodPrice);
+            return null;
+    }
+
+    //DELETE requests do not accept a request Body (unline Post and Patch do)
+    //therefore we need to use the @Param
+    @Delete(':id')
+    removeProduct(@Param('id') prodId: string) : void {
+        this.productsService.deleteProduct(prodId);
+        return null;
     }
 }
